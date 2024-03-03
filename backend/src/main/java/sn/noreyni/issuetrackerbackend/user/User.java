@@ -64,7 +64,7 @@ public class User extends BaseEntity implements Serializable {
     private String password;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(columnDefinition = "bit not null default B'1'")
     private boolean activated ;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

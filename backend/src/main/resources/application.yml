@@ -14,6 +14,9 @@ server:
       force: true
 
 spring:
+
+  banner:
+    location: classpath:banner.txt.txt
   # devs can disable this one depending on their needs
   devtools:
     restart:
@@ -50,13 +53,12 @@ spring:
       port: 6379
       host: localhost
       password: issuetracker
-
-# Flyway Configuration
-flyway:
-  enabled: true
-  locations: classpath:db/migration
-  table: flyway_issue_tracker_schema_history
-  baseline-on-migrate: true
+  # Flyway Configuration
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    table: flyway_issue_tracker_schema_history
+    baseline-on-migrate: true
 
 
 # Logging Configuration
@@ -67,7 +69,17 @@ logging:
     org.hibernate.SQL: DEBUG
     sn.noreyni.issuetrackerbackend: DEBUG
     org.hibernate.cache: DEBUG
+  pattern:
+    console: "%d{dd-MM-yyyy HH:mm:ss.SSS} %thread ${PID} [%X{correlationId}] %-5level %logger{36} - %class{1} - %msg%n"
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
 
 # OpenAPI (Swagger) Configuration
 springdoc:
@@ -76,8 +88,13 @@ springdoc:
   api-docs:
     path: /api/v1/api-docs
 
-
 application:
+  configuration:
+    cors-allowed-list:
+      - http://localhost:8080
+      - http://localhost:4200
+    public-api-list:
+      - /api/v1/public/**
   urls:
     dev-url: http://localhost:8080
     prod-url: http://192.168.56.10

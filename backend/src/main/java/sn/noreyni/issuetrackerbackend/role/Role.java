@@ -17,8 +17,11 @@ import sn.noreyni.issuetrackerbackend.shared.entity.BaseEntity;
 @AllArgsConstructor
 @Builder
 @Table( name = "issue_tracker_role",uniqueConstraints = {
-        @UniqueConstraint(columnNames = "name")
-})
+        @UniqueConstraint(columnNames = "name"),
+},
+        indexes = {
+                @Index(columnList = "name, active"),
+        })
 public class Role extends BaseEntity {
 
     @Id
@@ -31,6 +34,6 @@ public class Role extends BaseEntity {
     @Column(name="description")
     private String description;
 
-    @Column(columnDefinition = "bit not null default 1")
-    private boolean active=true;
+    @Column(columnDefinition = "bit not null default B'1'")
+    private boolean active;
 }
