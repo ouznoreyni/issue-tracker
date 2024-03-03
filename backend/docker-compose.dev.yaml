@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16.2-alpine3.19
+    container_name: issuetracker-postgres-container
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: issuetracker
+      POSTGRES_USER: issuetracker
+      POSTGRES_PASSWORD: issuetracker
+    volumes:
+      - issuetracker-postgres-data:/var/lib/postgresql/data
+
+  rabbitmq:
+    image: rabbitmq:3.13.0-management-alpine
+    container_name: my-rabbitmq-container
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: issuetracker
+      RABBITMQ_DEFAULT_PASS: issuetracker
+
+  redis:
+    image: redis:7.2.4-alpine
+    container_name: issuetracker-redis-container
+    ports:
+      - "6379:6379"
+    environment:
+      REDIS_PASSWORD: issuetracker
+    volumes:
+      - issuetracker-redis-data:/data
+
+volumes:
+  issuetracker-postgres-data:
+  issuetracker-redis-data:

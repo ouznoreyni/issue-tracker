@@ -1,0 +1,86 @@
+# Server Port Configuration
+server:
+  port: 8080
+#  ssl:
+#    key-store: classpath:config/security/certificate/issue.pfx
+#    key-store-password: FREE2019
+#    cyphers: TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 ,TLS_DHE_RSA_WITH_AES_128_GCM_SHA256 ,TLS_DHE_RSA_WITH_AES_256_GCM_SHA384 ,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,TLS_DHE_RSA_WITH_AES_128_CBC_SHA256,TLS_DHE_RSA_WITH_AES_256_CBC_SHA256,TLS_RSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA256
+#    enabled-protocols: TLSv1.2
+#    enabled: true
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+spring:
+  # devs can disable this one depending on their needs
+  devtools:
+    restart:
+      enabled: true
+
+  # PostgreSQL Configuration
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:postgresql://localhost:5432/issuetracker
+    username: issuetracker
+    password: issuetracker
+    driver-class-name: org.postgresql.Driver
+    jpa:
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.PostgreSQLDialect
+      hibernate:
+        ddl-auto: none
+
+  # RabbitMQ Configuration
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: issuetracker
+    password: issuetracker
+   # virtual-host: /
+  application:
+    name: issue-tracker
+
+  # Redis Configuration
+  data:
+    redis:
+      database: 0
+      port: 6379
+      host: localhost
+      password: issuetracker
+
+# Flyway Configuration
+flyway:
+  enabled: true
+  locations: classpath:db/migration
+  table: flyway_issue_tracker_schema_history
+  baseline-on-migrate: true
+
+
+# Logging Configuration
+logging:
+  level:
+    ROOT: DEBUG
+    org.springframework: DEBUG
+    org.hibernate.SQL: DEBUG
+    sn.noreyni.issuetrackerbackend: DEBUG
+    org.hibernate.cache: DEBUG
+
+
+# OpenAPI (Swagger) Configuration
+springdoc:
+  swagger-ui:
+    path: /api/v1/swagger-ui.html
+  api-docs:
+    path: /api/v1/api-docs
+
+
+application:
+  urls:
+    dev-url: http://localhost:8080
+    prod-url: http://192.168.56.10
+  jwt:
+    ttl-in-seconds: 90000
+    secret-key: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA6MbrQHoTPXKcqneelSuLBEyWPsVNMtmwYW8aZZhTzXoQBjUMZjeI6HX6Xh8dyp9mJWfMIGkZJv0qYZX3IDkQje/7qp/1jJ0gC4ZFkPwV9DTYeYUizcuESN6rI7BxWN4lXTZ9axyy+EULjH/mZvFbcgHmJLh1ZWrIRw7Oa5qTiv5+Z9T+Ml0t6EJgXZC2l9Lq8j0P6ePfnvW7YwKK2zRdX+FydsjT0/YIEij/Xndt1rZp6OJEIpz1/K7sbqj4S2zK6JSOj9fw2JD+fRqf+nmBBP5Rl+Hijc7XiX41GbW9D2dPXz4TGzBC+QEKYH6Rl4oKFao4XWJtzPE/q6PwIDAQAB"
