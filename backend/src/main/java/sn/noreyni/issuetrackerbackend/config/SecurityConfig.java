@@ -29,6 +29,7 @@ import sn.noreyni.issuetrackerbackend.security.jwt.JwtAuthFilter;
 public class SecurityConfig {
 
     private final JwtAuthFilter authFilter;
+
     @Bean
     public UserDetailsService userDetailsService() {
         return new CustomUserDetailsService();
@@ -42,13 +43,16 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers(
-                                new AntPathRequestMatcher("/api/v1/authentication/**"),
-                                new AntPathRequestMatcher("/api/v1/swagger-ui/**"),
-                                new AntPathRequestMatcher("/api/v1/api-docs/**")
-                        )
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated()
+                                        new AntPathRequestMatcher("/api/v1/authentication/**"),
+                                        new AntPathRequestMatcher("/api/v1/swagger-ui**"),
+                                        new AntPathRequestMatcher("/api/v1/swagger-ui/**"),
+                                        new AntPathRequestMatcher("/api/v1/api-docs**"),
+                                        new AntPathRequestMatcher("/api/v1/api-docs/**"),
+                                        new AntPathRequestMatcher("/api/v1/actuator/**")
+                                )
+                                .permitAll()
+                                .anyRequest()
+                                .authenticated()
 
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -63,12 +67,13 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider(){
-        var authenticationProvider=new DaoAuthenticationProvider();
+    public AuthenticationProvider authenticationProvider() {
+        var authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailsService());
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
     }
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
